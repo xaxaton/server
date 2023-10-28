@@ -37,7 +37,13 @@ class RegistrationTest(APITestCase):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(User.objects.count(), 1)
-        self.assertEqual(len(response.data.keys()), 5)
+        self.assertEqual(
+            set(response.data.keys()),
+            {
+                "email", "name", "surname", "middle_name",
+                "organization", "department", "position", "role"
+                },
+        )
 
 
 class LoginTest(APITestCase):
