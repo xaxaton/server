@@ -21,6 +21,6 @@ class ReviewsView(ListAPIView):
         review = Review.objects.create(
             text=request.data["review"]["text"],
             video=video,
-            image=image,
+            image=image
         )
         return Response({"review": model_to_dict(review)})

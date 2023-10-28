@@ -2,7 +2,9 @@ from django.urls import path
 
 from users.views import (
     RegistrationAPIView, LoginAPIView,
-    ConfirmRegistration, CancelRegistration
+    ConfirmRegistration, CancelRegistration,
+    RegistrationOrganizationAPIView,
+    FreeUsersAPIView, EmployeesAPIView
 )
 
 
@@ -18,4 +20,16 @@ urlpatterns = [
     path(
         "cancel-registration/<uidb64>/<token>/",
         CancelRegistration.as_view(), name='cancel_registration'),
+    path(
+        "organizations/register/", RegistrationOrganizationAPIView.as_view(),
+        name="org-register"
+    ),
+    path(
+        "users/", FreeUsersAPIView.as_view(),
+        name="free",
+    ),
+    path(
+        "organizations/employees/", EmployeesAPIView.as_view(),
+        name="employees"
+    ),
 ]

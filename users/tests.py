@@ -48,6 +48,9 @@ class LoginTest(APITestCase):
         url = reverse("users:register")
         data = CORRECT_DATA_EXAMPLE
         self.client.post(url, data, format="json")
+        user = User.objects.get(email=CORRECT_DATA_EXAMPLE["user"]["email"])
+        user.is_active = True
+        user.save()
 
     def test_login(self):
         url = reverse("users:login")
