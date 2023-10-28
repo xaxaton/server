@@ -8,6 +8,8 @@ from users.views import (
     RegistrationOrganizationAPIView,
     FreeUsersAPIView,
     EmployeesAPIView,
+    SendInviteView,
+    CurrentUserView
 )
 
 
@@ -41,4 +43,15 @@ urlpatterns = [
         EmployeesAPIView.as_view(),
         name="employees",
     ),
+    path(
+        "organizations/invite/",
+        SendInviteView.as_view(),
+        name="org-invite",
+    ),
+    path(
+        "confirm/<orgidb64>/<token>/",
+        ConfirmRegistration.as_view(),
+        name="confirm-invite",
+    ),
+    path("auth/", CurrentUserView.as_view(), name="auth")
 ]

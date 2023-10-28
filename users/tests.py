@@ -40,9 +40,15 @@ class RegistrationTest(APITestCase):
         self.assertEqual(
             set(response.data.keys()),
             {
-                "email", "name", "surname", "middle_name",
-                "organization", "department", "position", "role"
-                },
+                "email",
+                "name",
+                "surname",
+                "middle_name",
+                "organization",
+                "department",
+                "position",
+                "role",
+            },
         )
 
 

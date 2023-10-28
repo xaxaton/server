@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 
 from core.permissions import IsRecruiter
 from users.models import User, Organization
@@ -22,7 +22,7 @@ from users.serializers import (
     UserSerializer,
 )
 from users.renderers import UserJSONRenderer
-from users.token import account_activation_token
+from users.token import account_activation_token, invite_confirm_token
 
 
 class RegistrationAPIView(APIView):
@@ -174,3 +174,62 @@ class EmployeesAPIView(ListAPIView):
                 organization__id=self.request.user.organization.id
             )
         return []
+
+
+class SendInviteView(APIView):
+    permission_classes = (IsAuthenticated, IsRecruiter, )
+
+    def post(self, request):
+        user_model = get_user_model()
+        try:
+            to_user = user_model.objects.get(id=request.data.get("id", None))
+        except user_model.DoesNotExist:
+            to_user = None
+        if to_user:
+            current_site = get_current_site(request)
+            mail_subject = "ПрофТестиум || Приглашение в организацию"
+            organization = Organization.objects.get(
+                name=request.user.organization.name
+            )
+            message = render_to_string(
+                "invite.html",
+                {
+                    "user": to_user,
+                    "organization": organization,
+                    "domain": current_site.domain,
+                    "orgid": urlsafe_base64_encode(
+                        force_bytes(organization.id)
+                    ),
+                    "token": invite_confirm_token.make_token(organization),
+                },
+            )
+            email = EmailMessage(mail_subject, message, to=[to_user.email])
+            email.send()
+            answer_message = "Письмо успешно отправлено"
+        else:
+            answer_message = "Выбранного пользователя не существует"
+        return Response(
+            {"message": answer_message}, status=status.HTTP_201_CREATED
+        )
+
+
+class CurrentUserView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        user = User.objects.get(id=request.user.id)
+        return Response(
+            {
+                "user": {
+                    "email": user.email,
+                    "name": user.name,
+                    "surname": user.surname,
+                    "middle_name": user.middle_name,
+                    "organization": model_to_dict(user.organization),
+                    "role": user.role,
+                    "department": user.department,
+                    "position": user.position,
+                },
+            },
+            status=status.HTTP_201_CREATED,
+        )

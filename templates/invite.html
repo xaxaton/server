@@ -1,0 +1,7 @@
+{% autoescape off %} 
+Приветствуем, {{ user.get_full_name }}!
+
+Вас пригласили в организацию
+http://{{ domain }}{% url 'users:confirm-invite' orgidb64=orgid token=token %} 
+
+{% endautoescape %}
