@@ -90,11 +90,11 @@ class CancelRegistration(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request, *args, **kwargs):
-        User = get_user_model()
+        user_model = get_user_model()
         try:
             uid = force_text(urlsafe_base64_decode(self.kwargs["uidb64"]))
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = user_model.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, user_model.DoesNotExist):
             user = None
         if (
             user is not None and
