@@ -4,7 +4,7 @@ ___
 
 **1. Клонировать репозиторий**
 ```
-git clone https://github.com/delivery-food-osu/backend.git
+git clone https://github.com/xaxaton/server.git
 ```
 **2. Создать и активировать виртуальное окружение**
 ```
