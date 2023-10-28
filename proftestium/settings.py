@@ -12,6 +12,7 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="").split()
 
 INSTALLED_APPS = [
     "corsheaders",
+    "courses.apps.CoursesConfig",
     "reviews.apps.ReviewsConfig",
     "users.apps.UsersConfig",
     "django.contrib.admin",

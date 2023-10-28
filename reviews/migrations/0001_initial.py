@@ -4,25 +4,52 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Review',
+            name="Review",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.TextField(verbose_name='текст отзыва')),
-                ('video', models.CharField(blank=True, max_length=255, null=True, verbose_name='ссылка на видео')),
-                ('image', models.CharField(blank=True, max_length=255, null=True, verbose_name='ссылка на фото')),
-                ('is_published', models.BooleanField(default=True, verbose_name='опубликовано')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("text", models.TextField(verbose_name="текст отзыва")),
+                (
+                    "video",
+                    models.CharField(
+                        blank=True,
+                        max_length=255,
+                        null=True,
+                        verbose_name="ссылка на видео",
+                    ),
+                ),
+                (
+                    "image",
+                    models.CharField(
+                        blank=True,
+                        max_length=255,
+                        null=True,
+                        verbose_name="ссылка на фото",
+                    ),
+                ),
+                (
+                    "is_published",
+                    models.BooleanField(
+                        default=True, verbose_name="опубликовано"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'отзыв',
-                'verbose_name_plural': 'отзывы',
+                "verbose_name": "отзыв",
+                "verbose_name_plural": "отзывы",
             },
         ),
     ]

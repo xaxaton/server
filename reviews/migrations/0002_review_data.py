@@ -6,16 +6,21 @@ from django.utils.timezone import utc
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('reviews', '0001_initial'),
+        ("reviews", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='review',
-            name='data',
-            field=models.DateTimeField(auto_now_add=True, default=datetime.datetime(2023, 10, 28, 0, 25, 13, 80297, tzinfo=utc), verbose_name='дата публикации'),
+            model_name="review",
+            name="data",
+            field=models.DateTimeField(
+                auto_now_add=True,
+                default=datetime.datetime(
+                    2023, 10, 28, 0, 25, 13, 80297, tzinfo=utc
+                ),
+                verbose_name="дата публикации",
+            ),
             preserve_default=False,
         ),
     ]
