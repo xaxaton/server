@@ -112,19 +112,22 @@ class User(AbstractBaseUser, PermissionsMixin):
         Organization,
         on_delete=models.CASCADE,
         verbose_name="организация",
-        blank=True, null=True
+        blank=True,
+        null=True,
     )
     department = models.ForeignKey(
         Department,
         on_delete=models.CASCADE,
         verbose_name="отдел",
-        blank=True, null=True
+        blank=True,
+        null=True,
     )
     position = models.ForeignKey(
         Postion,
         on_delete=models.CASCADE,
         verbose_name="должность",
-        blank=True, null=True
+        blank=True,
+        null=True,
     )
     last_login = models.DateTimeField("последний вход", auto_now_add=True)
 

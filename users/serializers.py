@@ -84,12 +84,12 @@ class LoginSerializer(serializers.Serializer):
         if user.organization:
             response["organization"] = {
                 "name": user.organization.name,
-                "logo": user.organization.logo
+                "logo": user.organization.logo,
             }
         if user.department:
             response["department"] = user.department.name
         if user.position:
-            response["position"] = user.position.name,
+            response["position"] = (user.position.name,)
         return response
 
 

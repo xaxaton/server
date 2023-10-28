@@ -5,49 +5,112 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0002_tariff_is_published'),
-        ('users', '0001_initial'),
+        ("courses", "0002_tariff_is_published"),
+        ("users", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Organization',
+            name="Organization",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=250, unique=True, verbose_name='название')),
-                ('description', models.TextField(blank=True, null=True, verbose_name='описание')),
-                ('logo', models.CharField(max_length=255, verbose_name='логотип')),
-                ('tariff', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='courses.tariff', verbose_name='тариф')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=250, unique=True, verbose_name="название"
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(
+                        blank=True, null=True, verbose_name="описание"
+                    ),
+                ),
+                (
+                    "logo",
+                    models.CharField(max_length=255, verbose_name="логотип"),
+                ),
+                (
+                    "tariff",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="courses.tariff",
+                        verbose_name="тариф",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'организация',
-                'verbose_name_plural': 'организации',
+                "verbose_name": "организация",
+                "verbose_name_plural": "организации",
             },
         ),
         migrations.CreateModel(
-            name='Postion',
+            name="Postion",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, verbose_name='название')),
-                ('organization', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.organization', verbose_name='организация')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(max_length=255, verbose_name="название"),
+                ),
+                (
+                    "organization",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="users.organization",
+                        verbose_name="организация",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'должность',
-                'verbose_name_plural': 'должности',
+                "verbose_name": "должность",
+                "verbose_name_plural": "должности",
             },
         ),
         migrations.CreateModel(
-            name='Department',
+            name="Department",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, verbose_name='название')),
-                ('organization', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.organization', verbose_name='организация')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(max_length=255, verbose_name="название"),
+                ),
+                (
+                    "organization",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="users.organization",
+                        verbose_name="организация",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'отдел',
-                'verbose_name_plural': 'отделы',
+                "verbose_name": "отдел",
+                "verbose_name_plural": "отделы",
             },
         ),
     ]

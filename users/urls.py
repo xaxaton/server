@@ -1,10 +1,13 @@
 from django.urls import path
 
 from users.views import (
-    RegistrationAPIView, LoginAPIView,
-    ConfirmRegistration, CancelRegistration,
+    RegistrationAPIView,
+    LoginAPIView,
+    ConfirmRegistration,
+    CancelRegistration,
     RegistrationOrganizationAPIView,
-    FreeUsersAPIView, EmployeesAPIView
+    FreeUsersAPIView,
+    EmployeesAPIView,
 )
 
 
@@ -14,22 +17,28 @@ urlpatterns = [
     path("register/", RegistrationAPIView.as_view(), name="register"),
     path("login/", LoginAPIView.as_view(), name="login"),
     path(
-        "activate/<uidb64>/<token>/", ConfirmRegistration.as_view(),
-        name="activate"
+        "activate/<uidb64>/<token>/",
+        ConfirmRegistration.as_view(),
+        name="activate",
     ),
     path(
         "cancel-registration/<uidb64>/<token>/",
-        CancelRegistration.as_view(), name='cancel_registration'),
-    path(
-        "organizations/register/", RegistrationOrganizationAPIView.as_view(),
-        name="org-register"
+        CancelRegistration.as_view(),
+        name="cancel_registration",
     ),
     path(
-        "users/", FreeUsersAPIView.as_view(),
+        "organizations/register/",
+        RegistrationOrganizationAPIView.as_view(),
+        name="org-register",
+    ),
+    path(
+        "users/",
+        FreeUsersAPIView.as_view(),
         name="free",
     ),
     path(
-        "organizations/employees/", EmployeesAPIView.as_view(),
-        name="employees"
+        "organizations/employees/",
+        EmployeesAPIView.as_view(),
+        name="employees",
     ),
 ]

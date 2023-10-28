@@ -12,9 +12,7 @@ class ReviewTest(APITestCase):
 
     def test_post(self):
         url = reverse("reviews:all")
-        data = {
-            "review": {"text": "тест"}
-        }
+        data = {"review": {"text": "тест"}}
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)

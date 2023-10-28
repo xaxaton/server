@@ -19,8 +19,6 @@ class ReviewsView(ListAPIView):
         if image == "":
             image = None
         review = Review.objects.create(
-            text=request.data["review"]["text"],
-            video=video,
-            image=image
+            text=request.data["review"]["text"], video=video, image=image
         )
         return Response({"review": model_to_dict(review)})

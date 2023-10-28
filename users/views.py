@@ -19,7 +19,7 @@ from users.serializers import (
     RegistrationSerializer,
     LoginSerializer,
     OrganizationSerializer,
-    UserSerializer
+    UserSerializer,
 )
 from users.renderers import UserJSONRenderer
 from users.token import account_activation_token
@@ -38,15 +38,16 @@ class RegistrationAPIView(APIView):
         new_user = User.objects.get(email=serializer.data["email"])
         current_site = get_current_site(request)
         mail_subject = "Активация аккаунта ПрофТестиум"
-        message = render_to_string("user_activation.html", {
-            "user": new_user,
-            "domain": current_site.domain,
-            "uid": urlsafe_base64_encode(force_bytes(new_user.id)),
-            "token": account_activation_token.make_token(new_user),
-        })
-        email = EmailMessage(
-                    mail_subject, message, to=[new_user.email]
+        message = render_to_string(
+            "user_activation.html",
+            {
+                "user": new_user,
+                "domain": current_site.domain,
+                "uid": urlsafe_base64_encode(force_bytes(new_user.id)),
+                "token": account_activation_token.make_token(new_user),
+            },
         )
+        email = EmailMessage(mail_subject, message, to=[new_user.email])
         email.send()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -74,10 +75,9 @@ class ConfirmRegistration(APIView):
             user = user_model.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, user_model.DoesNotExist):
             user = None
-        if (
-            user is not None and
-                account_activation_token.check_token(
-                    user, self.kwargs["token"])):
+        if user is not None and account_activation_token.check_token(
+            user, self.kwargs["token"]
+        ):
             user.is_active = True
             user.save()
             status = "Аккаунт подтвержден!"
@@ -96,10 +96,9 @@ class CancelRegistration(APIView):
             user = user_model.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, user_model.DoesNotExist):
             user = None
-        if (
-            user is not None and
-                account_activation_token.check_token(
-                    user, self.kwargs["token"])):
+        if user is not None and account_activation_token.check_token(
+            user, self.kwargs["token"]
+        ):
             user.delete()
             status = "Регистрация отменена!"
         else:
@@ -128,15 +127,16 @@ class RegistrationOrganizationAPIView(APIView):
         new_user.save()
         current_site = get_current_site(request)
         mail_subject = "Активация аккаунта ПрофТестиум"
-        message = render_to_string("user_activation.html", {
-            "user": new_user,
-            "domain": current_site.domain,
-            "uid": urlsafe_base64_encode(force_bytes(new_user.id)),
-            "token": account_activation_token.make_token(new_user),
-        })
-        email = EmailMessage(
-                    mail_subject, message, to=[new_user.email]
+        message = render_to_string(
+            "user_activation.html",
+            {
+                "user": new_user,
+                "domain": current_site.domain,
+                "uid": urlsafe_base64_encode(force_bytes(new_user.id)),
+                "token": account_activation_token.make_token(new_user),
+            },
         )
+        email = EmailMessage(mail_subject, message, to=[new_user.email])
         email.send()
         return Response(
             {
@@ -151,18 +151,21 @@ class RegistrationOrganizationAPIView(APIView):
                     "position": None,
                 },
             },
-            status=status.HTTP_201_CREATED
+            status=status.HTTP_201_CREATED,
         )
 
 
 class FreeUsersAPIView(ListAPIView):
-    permission_classes = (IsAuthenticated, IsRecruiter, )
+    permission_classes = (
+        IsAuthenticated,
+        IsRecruiter,
+    )
     serializer_class = UserSerializer
     queryset = User.objects.filter(organization=None)
 
 
 class EmployeesAPIView(ListAPIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
 
     def get_queryset(self):

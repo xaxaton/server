@@ -11,6 +11,7 @@ DEBUG = config("DEBUG", default=True, cast=bool)
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="").split()
 
 INSTALLED_APPS = [
+    "drf_yasg",
     "corsheaders",
     "courses.apps.CoursesConfig",
     "reviews.apps.ReviewsConfig",
