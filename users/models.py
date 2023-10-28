@@ -20,6 +20,7 @@ class UserManager(BaseUserManager):
             middle_name=middle_name,
             email=self.normalize_email(email),
         )
+        user.is_active = False
         user.set_password(password)
         user.save()
         return user
@@ -35,6 +36,7 @@ class UserManager(BaseUserManager):
             middle_name=middle_name,
             email=email,
             password=password,
+            role=3,
         )
         user.is_superuser = True
         user.is_staff = True
@@ -81,10 +83,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self._generate_jwt_token()
 
     def get_full_name(self):
-        return self.name + self.surname + self.middle_name
+        return f"{self.surname} {self.name}  {self.middle_name}"
 
     def get_short_name(self):
-        return self.name + self.surname
+        return f"{self.name} {self.surname}"
 
     def _generate_jwt_token(self):
         token = jwt.encode(

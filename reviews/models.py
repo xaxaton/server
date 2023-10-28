@@ -10,7 +10,7 @@ class Review(models.Model):
         "ссылка на фото", max_length=255, null=True, blank=True
     )
     is_published = models.BooleanField("опубликовано", default=True)
-    data = models.DateTimeField("дата публикации", auto_now_add=True)
+    date = models.DateTimeField("дата публикации", auto_now_add=True)
 
     class Meta:
         verbose_name = "отзыв"

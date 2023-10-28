@@ -42,7 +42,7 @@ ROOT_URLCONF = "proftestium.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -87,6 +87,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = "/static/"
+STATIC_ROOT = "static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -97,3 +98,11 @@ REST_FRAMEWORK = {
     "NON_FIELD_ERRORS_KEY": "error",
     "DEFAULT_AUTHENTICATION_CLASSES": ("users.backends.JWTAuthentication",),
 }
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_PORT = 587
+EMAIL_HOST_USER = config("EMAIL_SENDER", default="sender")
+EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD", default="123")

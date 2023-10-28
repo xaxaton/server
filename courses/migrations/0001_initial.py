@@ -5,25 +5,53 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Tariff',
+            name="Tariff",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=150, unique=True, verbose_name='название')),
-                ('price', models.IntegerField(default=0, validators=[django.core.validators.MinValueValidator(0)], verbose_name='цена')),
-                ('users_count', models.PositiveIntegerField(verbose_name='кол-во пользователей')),
-                ('tests_count', models.PositiveIntegerField(verbose_name='кол-во тестов')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=150, unique=True, verbose_name="название"
+                    ),
+                ),
+                (
+                    "price",
+                    models.IntegerField(
+                        default=0,
+                        validators=[
+                            django.core.validators.MinValueValidator(0)
+                        ],
+                        verbose_name="цена",
+                    ),
+                ),
+                (
+                    "users_count",
+                    models.PositiveIntegerField(
+                        verbose_name="кол-во пользователей"
+                    ),
+                ),
+                (
+                    "tests_count",
+                    models.PositiveIntegerField(verbose_name="кол-во тестов"),
+                ),
             ],
             options={
-                'verbose_name': 'тариф',
-                'verbose_name_plural': 'тарифы',
+                "verbose_name": "тариф",
+                "verbose_name_plural": "тарифы",
             },
         ),
     ]

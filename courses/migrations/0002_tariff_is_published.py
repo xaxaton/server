@@ -4,15 +4,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0001_initial'),
+        ("courses", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tariff',
-            name='is_published',
-            field=models.BooleanField(default=True, verbose_name='опубликован'),
+            model_name="tariff",
+            name="is_published",
+            field=models.BooleanField(
+                default=True, verbose_name="опубликован"
+            ),
         ),
     ]
