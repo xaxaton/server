@@ -11,17 +11,17 @@ DEBUG = config("DEBUG", default=True, cast=bool)
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="").split()
 
 INSTALLED_APPS = [
-    "drf_yasg",
-    "corsheaders",
-    "courses.apps.CoursesConfig",
-    "reviews.apps.ReviewsConfig",
-    "users.apps.UsersConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_yasg",
+    "corsheaders",
+    "courses.apps.CoursesConfig",
+    "reviews.apps.ReviewsConfig",
+    "users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [

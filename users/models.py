@@ -46,7 +46,7 @@ class Department(models.Model):
         return f"Отдел '{self.name}'"
 
 
-class Postion(models.Model):
+class Position(models.Model):
     name = models.CharField("название", max_length=255)
     organization = models.ForeignKey(
         Organization,
@@ -102,11 +102,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField("имя", max_length=255)
     surname = models.CharField("фамилия", max_length=255)
     middle_name = models.CharField("отчество", max_length=255)
-    # 0 - обычный пользователь, 1 - HR, 2 - админ школы, 3 - админ сервиса
     role = models.IntegerField(
         "роль",
         default=0,
         validators=[MinValueValidator(0), MaxValueValidator(3)],
+        help_text=(
+            "0 - обычный пользователь, 1"
+            " - HR, 2 - админ школы, 3 - админ сервиса"
+        ),
     )
     organization = models.ForeignKey(
         Organization,
@@ -123,7 +126,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True,
     )
     position = models.ForeignKey(
-        Postion,
+        Position,
         on_delete=models.CASCADE,
         verbose_name="должность",
         blank=True,
@@ -139,6 +142,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name", "surname", "middle_name"]
     objects = UserManager()
+
+    class Meta:
+        verbose_name = "пользователь"
+        verbose_name_plural = "пользователи"
 
     def __str__(self):
         return self.email
@@ -161,3 +168,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         )
 
         return token
+
+    def save(self, *args, **kwargs):
+        if self.role >= 1:
+            self.is_superuser = True
+        super(User, self).save(*args, **kwargs)

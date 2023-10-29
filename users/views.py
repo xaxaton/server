@@ -22,7 +22,11 @@ from users.serializers import (
     UserSerializer,
 )
 from users.renderers import UserJSONRenderer
-from users.token import account_activation_token, invite_confirm_token
+from users.token import (
+    account_activation_token,
+    invite_confirm_token,
+    qr_invite_token,
+)
 
 
 class RegistrationAPIView(APIView):
@@ -224,7 +228,9 @@ class CurrentUserView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        user = User.objects.get(id=request.user.id)
+        user = User.objects.select_related("organization").get(
+            id=request.user.id
+        )
         organization = None
         if user.organization:
             organization = model_to_dict(user.organization)
@@ -274,3 +280,56 @@ class ConfirmTeamJoin(APIView):
         else:
             status = "Вы воспользовались невалидной ссылкой"
         return render(request, "confirm_user.html", {"message": status})
+
+
+class GetQRInviteView(APIView):
+    permission_classes = (
+        IsAuthenticated,
+        IsRecruiter,
+    )
+
+    def get(self, request):
+        organization = Organization.objects.get(
+            name=request.user.organization.name
+        )
+        current_site = get_current_site(request)
+        domain = current_site.domain
+        orgid = urlsafe_base64_encode(force_bytes(organization.id))
+        token = qr_invite_token.make_token(organization)
+
+        url = f"http://{domain}/api/qr/{orgid}/{token}/"
+        return Response({"url": url})
+
+
+class ConfirmQRTeamJoin(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, *args, **kwargs):
+        try:
+            user = request.user
+            orgid = force_text(urlsafe_base64_decode(self.kwargs["orgid"]))
+            organization = Organization.objects.get(id=orgid)
+        except (
+            TypeError,
+            ValueError,
+            OverflowError,
+            user.DoesNotExist,
+            organization.DoesNotExist,
+        ):
+            organization = None
+            user = None
+        if (
+            not user.organization
+            and user is not None
+            and organization is not None
+            and qr_invite_token.check_token(organization, self.kwargs["token"])
+        ):
+            user.organization = organization
+            user.save()
+            status = f"Вы вступили в организацию {organization.name}"
+        else:
+            status = (
+                "Вы воспользовались невалидным "
+                "QR-кодом или уже состоите в организации"
+            )
+        return Response({"message": status})

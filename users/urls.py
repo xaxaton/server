@@ -11,6 +11,8 @@ from users.views import (
     SendInviteView,
     ConfirmTeamJoin,
     CurrentUserView,
+    GetQRInviteView,
+    ConfirmQRTeamJoin,
 )
 
 
@@ -48,6 +50,12 @@ urlpatterns = [
         "organizations/invite/",
         SendInviteView.as_view(),
         name="org-invite",
+    ),
+    path("organizations/qr/", GetQRInviteView.as_view(), name="qr-org-invite"),
+    path(
+        "qr/<orgid>/<token>/",
+        ConfirmQRTeamJoin.as_view(),
+        name="confirm_invite",
     ),
     path(
         "confirm/<orgidb64>/<uidb64>/<token>/",
