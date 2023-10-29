@@ -14,12 +14,13 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 
 from core.permissions import IsRecruiter
-from users.models import User, Organization
+from users.models import User, Organization, Tariff, Position, Department
 from users.serializers import (
     RegistrationSerializer,
     LoginSerializer,
     OrganizationSerializer,
     UserSerializer,
+    TariffSerializer,
 )
 from users.renderers import UserJSONRenderer
 from users.token import (
@@ -27,6 +28,11 @@ from users.token import (
     invite_confirm_token,
     qr_invite_token,
 )
+
+
+class TariffView(ListAPIView):
+    serializer_class = TariffSerializer
+    queryset = Tariff.objects.filter()
 
 
 class RegistrationAPIView(APIView):
@@ -168,16 +174,61 @@ class FreeUsersAPIView(ListAPIView):
     queryset = User.objects.filter(organization=None)
 
 
+class PositionsInOrgView(APIView):
+    permission_classes = (
+        IsAuthenticated,
+        IsRecruiter,
+    )
+
+    def get(self, request):
+        organization = request.user.organization
+        positions = Position.objects.filter(organization=organization)
+        data = [{"id": model.id, "name": model.name} for model in positions]
+        return Response(data)
+
+
+class DepartmentInOrgView(APIView):
+    permission_classes = (
+        IsAuthenticated,
+        IsRecruiter,
+    )
+
+    def get(self, request):
+        organization = request.user.organization
+        departments = Department.objects.filter(organization=organization)
+        data = [{"id": model.id, "name": model.name} for model in departments]
+        return Response(data)
+
+
 class EmployeesAPIView(ListAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = UserSerializer
 
-    def get_queryset(self):
-        if self.request.user.organization:
-            return User.objects.filter(
-                organization__id=self.request.user.organization.id
-            )
-        return []
+    def get(self, request):
+        organization = request.user.organization
+        employees = User.objects.filter(organization=organization)
+        data = [
+            {
+                "email": model.email,
+                "name": model.name,
+                "surname": model.surname,
+                "middle_name": model.middle_name,
+                "id": model.id,
+                "department": {
+                    "id": model.department.id,
+                    "name": model.department.name,
+                }
+                if model.department
+                else None,
+                "position": {
+                    "id": model.position.id,
+                    "name": model.position.name,
+                }
+                if model.position
+                else None,
+            }
+            for model in employees
+        ]
+        return Response(data)
 
 
 class SendInviteView(APIView):
@@ -232,8 +283,14 @@ class CurrentUserView(APIView):
             id=request.user.id
         )
         organization = None
+        position = None
+        department = None
         if user.organization:
             organization = model_to_dict(user.organization)
+        if user.department:
+            department = model_to_dict(user.department)
+        if user.position:
+            position = model_to_dict(user.position)
         return Response(
             {
                 "user": {
@@ -243,8 +300,8 @@ class CurrentUserView(APIView):
                     "middle_name": user.middle_name,
                     "organization": organization,
                     "role": user.role,
-                    "department": user.department,
-                    "position": user.position,
+                    "department": department,
+                    "position": position,
                 },
             },
             status=status.HTTP_201_CREATED,

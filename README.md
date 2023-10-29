@@ -25,8 +25,16 @@ DEBUG = True/False
 ALLOWED_HOSTS = host1 host2 host3
 EMAIL_SENDER = writehere
 EMAIL_PASSWORD = writehere
+DB_NAME = writehere
+DB_USER = writehere
+DB_PASSWORD = writehere
+DB_HOST = writehere
 ```
-**5. Запустить сервер**
+**5. При запуске на новой базе данных**
+```
+python manage.py migrate
+```
+**6. Запустить сервер**
 ```
 python manage.py runserver
 ```

@@ -2,8 +2,7 @@ from django.contrib.auth import authenticate
 
 from rest_framework import serializers
 
-from courses.models import Tariff
-from users.models import User, Organization
+from users.models import User, Organization, Tariff
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -126,4 +125,17 @@ class UserSerializer(serializers.ModelSerializer):
             "surname",
             "middle_name",
             "id",
+            "department",
+            "position",
         ]
+
+
+class TariffSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=150)
+    price = serializers.IntegerField()
+    users_count = serializers.IntegerField()
+    tests_count = serializers.IntegerField()
+
+    class Meta:
+        model = Tariff
+        fields = "__all__"

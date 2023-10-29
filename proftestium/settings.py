@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "courses.apps.CoursesConfig",
     "reviews.apps.ReviewsConfig",
     "users.apps.UsersConfig",
+    "tickets.apps.TicketsConfig",
 ]
 
 MIDDLEWARE = [
@@ -58,7 +59,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "proftestium.wsgi.application"
 
-if DEBUG or "test" in sys.argv:
+if "test" in sys.argv:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -74,9 +75,7 @@ else:
             "PASSWORD": config("DB_PASSWORD"),
             "HOST": config("DB_HOST"),
             "PORT": "3306",
-            "OPTIONS": {
-                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'"
-            }
+            "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
         }
     }
 
