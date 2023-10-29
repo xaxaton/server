@@ -14,15 +14,13 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 
 from core.permissions import IsRecruiter
-from users.models import (
-    User, Organization, Tariff, Position, Department
-)
+from users.models import User, Organization, Tariff, Position, Department
 from users.serializers import (
     RegistrationSerializer,
     LoginSerializer,
     OrganizationSerializer,
     UserSerializer,
-    TariffSerializer
+    TariffSerializer,
 )
 from users.renderers import UserJSONRenderer
 from users.token import (
@@ -185,10 +183,7 @@ class PositionsInOrgView(APIView):
     def get(self, request):
         organization = request.user.organization
         positions = Position.objects.filter(organization=organization)
-        data = [
-            {"id": model.id, "name": model.name}
-            for model in positions
-        ]
+        data = [{"id": model.id, "name": model.name} for model in positions]
         return Response(data)
 
 
@@ -201,10 +196,7 @@ class DepartmentInOrgView(APIView):
     def get(self, request):
         organization = request.user.organization
         departments = Department.objects.filter(organization=organization)
-        data = [
-            {"id": model.id, "name": model.name}
-            for model in departments
-        ]
+        data = [{"id": model.id, "name": model.name} for model in departments]
         return Response(data)
 
 
@@ -222,12 +214,17 @@ class EmployeesAPIView(ListAPIView):
                 "middle_name": model.middle_name,
                 "id": model.id,
                 "department": {
-                    "id": model.department.id, "name": model.department.name
-                } if model.department else None,
+                    "id": model.department.id,
+                    "name": model.department.name,
+                }
+                if model.department
+                else None,
                 "position": {
                     "id": model.position.id,
-                    "name": model.position.name
-                } if model.position else None,
+                    "name": model.position.name,
+                }
+                if model.position
+                else None,
             }
             for model in employees
         ]

@@ -70,6 +70,7 @@ urlpatterns = [
     path("organizations/positions/", PositionsInOrgView.as_view(), name="pos"),
     path(
         "organizations/departments/",
-        DepartmentInOrgView.as_view(), name="deps"
-    )
+        DepartmentInOrgView.as_view(),
+        name="deps",
+    ),
 ]

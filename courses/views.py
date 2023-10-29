@@ -12,14 +12,12 @@ from users.models import Organization, Position, Department
 
 
 class CoursesView(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         orgid = self.request.user.organization.id
         organization = Organization.objects.get(id=orgid)
-        qs = Course.objects.filter(
-            organization=organization
-        )
+        qs = Course.objects.filter(organization=organization)
         qs_for_user = qs.filter(department=None, position=None)
         if self.request.user.role == 0:
             if self.request.user.department:
@@ -33,10 +31,7 @@ class CoursesView(APIView):
                 qs_for_user += position_qs
                 qs_for_user += qs_for_user
                 qs = qs_for_user
-        data = [
-            CourseSerializer(model).data
-            for model in qs
-        ]
+        data = [CourseSerializer(model).data for model in qs]
         return Response(data)
 
     def post(self, request):
@@ -58,13 +53,12 @@ class CoursesView(APIView):
 
             organization = Organization.objects.get(id=orgid)
             new_course = Course.objects.create(
-                name=name, organization=organization,
-                department=department, position=position
+                name=name,
+                organization=organization,
+                department=department,
+                position=position,
             )
-            return Response({
-                "name": new_course.name,
-                "id": new_course.id
-            })
+            return Response({"name": new_course.name, "id": new_course.id})
         return Response(status=status.HTTP_403_FORBIDDEN)
 
 
@@ -89,13 +83,17 @@ class AllTestsView(APIView):
                     "organization": model_to_dict(model.course.organization),
                     "department": {
                         "id": model.course.department.id,
-                        "name": model.course.department.name
-                    } if model.course.department else None,
+                        "name": model.course.department.name,
+                    }
+                    if model.course.department
+                    else None,
                     "position": {
                         "id": model.course.position.id,
-                        "name": model.course.position.name
-                    } if model.course.position else None,
-                }
+                        "name": model.course.position.name,
+                    }
+                    if model.course.position
+                    else None,
+                },
             }
             for model in tests
         ]

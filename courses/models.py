@@ -6,9 +6,7 @@ from users.models import Department, Position, User, Organization
 class Course(models.Model):
     name = models.CharField("название", max_length=150)
     organization = models.ForeignKey(
-        Organization,
-        on_delete=models.CASCADE,
-        verbose_name="организация"
+        Organization, on_delete=models.CASCADE, verbose_name="организация"
     )
     department = models.ForeignKey(
         Department,
@@ -101,22 +99,13 @@ class Answer(models.Model):
 
 class Result(models.Model):
     user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name="пользователь"
+        User, on_delete=models.CASCADE, verbose_name="пользователь"
     )
     test = models.ForeignKey(
-        Test,
-        on_delete=models.CASCADE,
-        verbose_name="тест"
+        Test, on_delete=models.CASCADE, verbose_name="тест"
     )
-    correct_answers_count = models.IntegerField(
-        "кол-во правильных ответов"
-    )
-    finish_date = models.DateTimeField(
-        "дата сдачи",
-        auto_now_add=True
-    )
+    correct_answers_count = models.IntegerField("кол-во правильных ответов")
+    finish_date = models.DateTimeField("дата сдачи", auto_now_add=True)
 
     class Meta:
         verbose_name = "результат"

@@ -10,19 +10,7 @@ from courses.views import (
 app_name = "courses"
 
 urlpatterns = [
-    path(
-        "courses/",
-        CoursesView.as_view(),
-        name="all"
-    ),
-    path(
-        "courses/<int:id>/",
-        DeleteCourseView.as_view(),
-        name="delete"
-    ),
-    path(
-        "tests/",
-        AllTestsView.as_view(),
-        name="all-tests"
-    ),
+    path("courses/", CoursesView.as_view(), name="all"),
+    path("courses/<int:id>/", DeleteCourseView.as_view(), name="delete"),
+    path("tests/", AllTestsView.as_view(), name="all-tests"),
 ]

@@ -6,35 +6,81 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0001_initial'),
+        ("users", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Tariff',
+            name="Tariff",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=150, unique=True, verbose_name='название')),
-                ('price', models.IntegerField(default=0, validators=[django.core.validators.MinValueValidator(0)], verbose_name='цена')),
-                ('users_count', models.PositiveIntegerField(verbose_name='кол-во пользователей')),
-                ('tests_count', models.PositiveIntegerField(verbose_name='кол-во тестов')),
-                ('is_published', models.BooleanField(default=True, verbose_name='опубликован')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=150, unique=True, verbose_name="название"
+                    ),
+                ),
+                (
+                    "price",
+                    models.IntegerField(
+                        default=0,
+                        validators=[
+                            django.core.validators.MinValueValidator(0)
+                        ],
+                        verbose_name="цена",
+                    ),
+                ),
+                (
+                    "users_count",
+                    models.PositiveIntegerField(
+                        verbose_name="кол-во пользователей"
+                    ),
+                ),
+                (
+                    "tests_count",
+                    models.PositiveIntegerField(verbose_name="кол-во тестов"),
+                ),
+                (
+                    "is_published",
+                    models.BooleanField(
+                        default=True, verbose_name="опубликован"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'тариф',
-                'verbose_name_plural': 'тарифы',
+                "verbose_name": "тариф",
+                "verbose_name_plural": "тарифы",
             },
         ),
         migrations.AlterField(
-            model_name='user',
-            name='role',
-            field=models.IntegerField(default=0, help_text='0 - обычный пользователь, 1 - HR, 2 - админ школы, 3 - админ сервиса', validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(3)], verbose_name='роль'),
+            model_name="user",
+            name="role",
+            field=models.IntegerField(
+                default=0,
+                help_text="0 - обычный пользователь, 1 - HR, 2 - админ школы, 3 - админ сервиса",
+                validators=[
+                    django.core.validators.MinValueValidator(0),
+                    django.core.validators.MaxValueValidator(3),
+                ],
+                verbose_name="роль",
+            ),
         ),
         migrations.AlterField(
-            model_name='organization',
-            name='tariff',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.tariff', verbose_name='тариф'),
+            model_name="organization",
+            name="tariff",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="users.tariff",
+                verbose_name="тариф",
+            ),
         ),
     ]
