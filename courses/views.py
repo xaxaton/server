@@ -1,10 +1,12 @@
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from courses.models import Course
 from courses.serializers import CourseSerializer
-from users.models import Organization
+from core.permissions import IsRecruiter
+from users.models import Organization, Position, Department
 
 
 class CoursesView(APIView):
@@ -32,14 +34,38 @@ class CoursesView(APIView):
         ]
         return Response(data)
 
-    def delete(self):
-        ...
-    # def post(self, request):
-    #     name = request.data.get("name", None)
-    #     orgid = request.data["organization"].get("id", None)
-    #     organization = Organization.objects.get(id=orgid)
-    #     qs = Course.objects.filter(organization=organization)
-    #     if "department" in request.data:
-    #         qs = qs.filter(department=request.data.get("department"))
-    #     if "position" in request.data:
-    #         qs = qs.filter(position=request.data.get("department"))
+    def post(self, request):
+        if request.user.role > 0:
+            name = request.data.get("name", None)
+            orgid = request.data["organization"].get("id", None)
+            dep = request.data.get("department", None)
+            pos = request.data.get("position", None)
+            department = None
+            position = None
+            if dep:
+                if dep.get("id", None):
+                    depid = dep.get("id", None)
+                    department = Department.objects.get(id=depid)
+            if pos:
+                if pos.get("id", None):
+                    posid = pos.get("id", None)
+                    position = Position.objects.get(id=posid)
+
+            organization = Organization.objects.get(id=orgid)
+            new_course = Course.objects.create(
+                name=name, organization=organization,
+                department=department, position=position
+            )
+            return Response({
+                "name": new_course.name,
+                "id": new_course.id
+            })
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+
+class DeleteCourseView(APIView):
+    permission_classes = (IsAuthenticated, IsRecruiter)
+
+    def get(self, request, id):
+        Course.objects.get(id=id)
+        return Response(status=status.HTTP_200_OK)

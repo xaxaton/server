@@ -2,10 +2,7 @@ from django.contrib.auth import authenticate
 
 from rest_framework import serializers
 
-from users.models import (
-    User, Organization, Tariff,
-    Department, Position
-)
+from users.models import User, Organization, Tariff
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -119,28 +116,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
         return Organization.objects.create(**validated_data)
 
 
-class DepartmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Department
-        fields = [
-            "id",
-            "name"
-        ]
-
-
-class PositionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Department
-        fields = [
-            "id",
-            "name"
-        ]
-
-
 class UserSerializer(serializers.ModelSerializer):
-    department = DepartmentSerializer(required=False)
-    position = PositionSerializer(required=False)\
-
     class Meta:
         model = User
         fields = [

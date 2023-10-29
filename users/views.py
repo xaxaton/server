@@ -238,8 +238,14 @@ class CurrentUserView(APIView):
             id=request.user.id
         )
         organization = None
+        position = None
+        department = None
         if user.organization:
             organization = model_to_dict(user.organization)
+        if user.department:
+            department = model_to_dict(user.department)
+        if user.position:
+            position = model_to_dict(user.position)
         return Response(
             {
                 "user": {
@@ -249,8 +255,8 @@ class CurrentUserView(APIView):
                     "middle_name": user.middle_name,
                     "organization": organization,
                     "role": user.role,
-                    "department": user.department,
-                    "position": user.position,
+                    "department": department,
+                    "position": position,
                 },
             },
             status=status.HTTP_201_CREATED,
