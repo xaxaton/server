@@ -21,15 +21,15 @@ pip install requirements/test.txt
 **4. Создать .env файл, содержащий секреты**
 Этот файл должен быть в корневой папке. Его содержимое должно выглядеть следующим образом:
 ```
-SECRET_KEY = writesecretkeyhere
-DEBUG = True/False
-ALLOWED_HOSTS = host1 host2 host3
-EMAIL_SENDER = writehere
-EMAIL_PASSWORD = writehere
-DB_NAME = writehere
-DB_USER = writehere
-DB_PASSWORD = writehere
-DB_HOST = writehere
+SECRET_KEY = django-insecure-xchzcg=(-h(t7zjdo0miwq2j6dhnrdt=4$4e@nmgvj0(^6^l!r
+DEBUG = True
+ALLOWED_HOSTS = *
+EMAIL_SENDER = nabb2134@gmail.com
+EMAIL_PASSWORD = lhzhsmtqxhagvxec
+DB_NAME = ct84784_proftest
+DB_USER = ct84784_proftest
+DB_PASSWORD = ZiGcjU9c
+DB_HOST = vh312.timeweb.ru
 ```
 **5. При запуске на новой базе данных**
 ```
