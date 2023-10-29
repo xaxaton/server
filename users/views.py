@@ -297,7 +297,7 @@ class GetQRInviteView(APIView):
         orgid = urlsafe_base64_encode(force_bytes(organization.id))
         token = qr_invite_token.make_token(organization)
 
-        url = f"http://{domain}/api/qr/{orgid}/{token}/"
+        url = f"https://{domain}/api/qr/{orgid}/{token}/"
         return Response({"url": url})
 
 
