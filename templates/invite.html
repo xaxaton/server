@@ -2,6 +2,6 @@
 Приветствуем, {{ user.get_full_name }}!
 
 Вас пригласили в организацию
-http://{{ domain }}{% url 'users:confirm-invite' orgidb64=orgid token=token %} 
+http://{{ domain }}{% url 'users:confirm_invite' orgidb64=orgid uidb64=uid token=token %} 
 
 {% endautoescape %}

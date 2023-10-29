@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView
 
 from core.permissions import IsRecruiter
 from users.models import User, Organization
@@ -177,7 +177,10 @@ class EmployeesAPIView(ListAPIView):
 
 
 class SendInviteView(APIView):
-    permission_classes = (IsAuthenticated, IsRecruiter, )
+    permission_classes = (
+        IsAuthenticated,
+        IsRecruiter,
+    )
 
     def post(self, request):
         user_model = get_user_model()
@@ -186,26 +189,30 @@ class SendInviteView(APIView):
         except user_model.DoesNotExist:
             to_user = None
         if to_user:
-            current_site = get_current_site(request)
-            mail_subject = "ПрофТестиум || Приглашение в организацию"
-            organization = Organization.objects.get(
-                name=request.user.organization.name
-            )
-            message = render_to_string(
-                "invite.html",
-                {
-                    "user": to_user,
-                    "organization": organization,
-                    "domain": current_site.domain,
-                    "orgid": urlsafe_base64_encode(
-                        force_bytes(organization.id)
-                    ),
-                    "token": invite_confirm_token.make_token(organization),
-                },
-            )
-            email = EmailMessage(mail_subject, message, to=[to_user.email])
-            email.send()
-            answer_message = "Письмо успешно отправлено"
+            if to_user.organization:
+                answer_message = "Данный пользователь уже в организации"
+            else:
+                current_site = get_current_site(request)
+                mail_subject = "ПрофТестиум || Приглашение в организацию"
+                organization = Organization.objects.get(
+                    name=request.user.organization.name
+                )
+                message = render_to_string(
+                    "invite.html",
+                    {
+                        "user": to_user,
+                        "organization": organization,
+                        "domain": current_site.domain,
+                        "orgid": urlsafe_base64_encode(
+                            force_bytes(organization.id)
+                        ),
+                        "uid": urlsafe_base64_encode(force_bytes(to_user.id)),
+                        "token": invite_confirm_token.make_token(to_user),
+                    },
+                )
+                email = EmailMessage(mail_subject, message, to=[to_user.email])
+                email.send()
+                answer_message = "Письмо успешно отправлено"
         else:
             answer_message = "Выбранного пользователя не существует"
         return Response(
@@ -214,10 +221,13 @@ class SendInviteView(APIView):
 
 
 class CurrentUserView(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         user = User.objects.get(id=request.user.id)
+        organization = None
+        if user.organization:
+            organization = model_to_dict(user.organization)
         return Response(
             {
                 "user": {
@@ -225,7 +235,7 @@ class CurrentUserView(APIView):
                     "name": user.name,
                     "surname": user.surname,
                     "middle_name": user.middle_name,
-                    "organization": model_to_dict(user.organization),
+                    "organization": organization,
                     "role": user.role,
                     "department": user.department,
                     "position": user.position,
@@ -233,3 +243,34 @@ class CurrentUserView(APIView):
             },
             status=status.HTTP_201_CREATED,
         )
+
+
+class ConfirmTeamJoin(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, *args, **kwargs):
+        try:
+            uid = force_text(urlsafe_base64_decode(self.kwargs["uidb64"]))
+            orgid = force_text(urlsafe_base64_decode(self.kwargs["orgidb64"]))
+            organization = Organization.objects.get(id=orgid)
+            user = User.objects.get(id=uid)
+        except (
+            TypeError,
+            ValueError,
+            OverflowError,
+            organization.DoesNotExist,
+            user.DoesNotExist,
+        ):
+            organization = None
+            user = None
+        if (
+            user is not None
+            and organization is not None
+            and invite_confirm_token.check_token(user, self.kwargs["token"])
+        ):
+            user.organization = organization
+            user.save()
+            status = f"Вы вступили в организацию {organization.name}"
+        else:
+            status = "Вы воспользовались невалидной ссылкой"
+        return render(request, "confirm_user.html", {"message": status})

@@ -6,5 +6,5 @@
 http://{{ domain }}{% url 'users:activate' uidb64=uid token=token %} 
 
 Если Ваша почта была указана не Вами, то вы можете отменить чужую регистрацию с помощью ссылки:
-http://{{ domain }}{% url 'users:cancel_registration' uidb64=uid token=token %} 
+http://{{ domain }}{% url 'users:cancel_registration' uidb64=user.id token=token %} 
 {% endautoescape %}

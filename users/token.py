@@ -15,14 +15,5 @@ class TokenGenerator(PasswordResetTokenGenerator):
         )
 
 
-class InviteTokenGenerator(PasswordResetTokenGenerator):
-    def _make_hash_value(self, organization, timestamp):
-        return (
-            six.text_type(organization.id)
-            + six.text_type(timestamp)
-            + six.text_type(organization.tariff.id)
-        )
-
-
 account_activation_token = TokenGenerator()
-invite_confirm_token = InviteTokenGenerator()
+invite_confirm_token = TokenGenerator()
