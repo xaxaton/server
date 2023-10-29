@@ -1,9 +1,11 @@
+from django.forms.models import model_to_dict
+
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from courses.models import Course
+from courses.models import Course, Test
 from courses.serializers import CourseSerializer
 from core.permissions import IsRecruiter
 from users.models import Organization, Position, Department
@@ -16,18 +18,21 @@ class CoursesView(APIView):
         orgid = self.request.user.organization.id
         organization = Organization.objects.get(id=orgid)
         qs = Course.objects.filter(
-            organization=organization, department=None, position=None
+            organization=organization
         )
+        qs_for_user = qs.filter(department=None, position=None)
         if self.request.user.role == 0:
             if self.request.user.department:
-                department_qs = Course.objects.filter(
+                department_qs = qs.filter(
                     department=self.request.user.department
                 )
             if self.request.user.position and self.request.user.department:
                 position_qs = department_qs.filter(
                     department=self.request.user.department
                 )
-                qs += position_qs
+                qs_for_user += position_qs
+                qs_for_user += qs_for_user
+                qs = qs_for_user
         data = [
             CourseSerializer(model).data
             for model in qs
@@ -69,3 +74,29 @@ class DeleteCourseView(APIView):
     def delete(self, request, id):
         Course.objects.get(id=id).delete()
         return Response(status=status.HTTP_200_OK)
+
+
+class AllTestsView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        tests = Test.objects.all()
+        data = [
+            {
+                "id": model.id,
+                "course": {
+                    "name": model.course.name,
+                    "organization": model_to_dict(model.course.organization),
+                    "department": {
+                        "id": model.course.department.id,
+                        "name": model.course.department.name
+                    } if model.course.department else None,
+                    "position": {
+                        "id": model.course.position.id,
+                        "name": model.course.position.name
+                    } if model.course.position else None,
+                }
+            }
+            for model in tests
+        ]
+        return Response(data)
