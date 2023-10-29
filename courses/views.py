@@ -66,6 +66,6 @@ class CoursesView(APIView):
 class DeleteCourseView(APIView):
     permission_classes = (IsAuthenticated, IsRecruiter)
 
-    def get(self, request, id):
-        Course.objects.get(id=id)
+    def delete(self, request, id):
+        Course.objects.get(id=id).delete()
         return Response(status=status.HTTP_200_OK)

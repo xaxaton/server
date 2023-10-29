@@ -174,6 +174,10 @@ class FreeUsersAPIView(ListAPIView):
     queryset = User.objects.filter(organization=None)
 
 
+class PositionsInOrgView(ListAPIView):
+    ...
+
+
 class EmployeesAPIView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
