@@ -14,6 +14,8 @@ from users.views import (
     GetQRInviteView,
     ConfirmQRTeamJoin,
     TariffView,
+    PositionsInOrgView,
+    DepartmentInOrgView,
 )
 
 
@@ -65,4 +67,9 @@ urlpatterns = [
         name="confirm_invite",
     ),
     path("auth/", CurrentUserView.as_view(), name="auth"),
+    path("organizations/positions/", PositionsInOrgView.as_view(), name="pos"),
+    path(
+        "organizations/departments/",
+        DepartmentInOrgView.as_view(), name="deps"
+    )
 ]
