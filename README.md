@@ -1,4 +1,5 @@
 # Red Hot ОГУ Peppers
+### * ПРОЕКТ: <a href="https://osu-team.site/">https://osu-team.site/</a>
 ___
 ## Пошаговая установка и запуск проекта
 
@@ -42,6 +43,5 @@ ___
 
 # API
 ##### Внимание: swagger используется исключительно для демонстрации доступных эндпоинтов. Не во всех эндпоинты можно передать необходимые параметры, для тестирования используйте разработанное нами веб-приложение или ПО для отправки запросов.
-###### * SWAGGER: <a href="http://127.0.0.1:8000/swagger/">http://127.0.0.1:8000/swagger/</a>
-###### * REDOC: <a href="http://127.0.0.1:8000/redoc/">http://127.0.0.1:8000/redoc/</a>
-###### * АДМИНКА: <a href="http://127.0.0.1:8000/docs/">http://127.0.0.1:8000/admin/</a>
+###### * SWAGGER: <a href="https://osu-team.site/swagger/">https://osu-team.site/swagger/</a>
+###### * АДМИНКА: <a href="https://osu-team.site/admin/">https://osu-team.site/admin/</a>
