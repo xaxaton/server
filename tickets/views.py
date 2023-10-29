@@ -16,7 +16,7 @@ class AllTicketsView(APIView):
             if request.user.role > 0:
                 tickets = Ticket.objects.all()
             else:
-                tickets = Ticket.object.filter(user=request.user)
+                tickets = Ticket.objects.filter(user=request.user)
             data = [
                 {
                     "id": model.id,
