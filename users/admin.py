@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group
 
-from users.models import User, Department, Position
+from users.models import User, Department, Position, Tariff
 
 
 class HRAdminForm(forms.ModelForm):
@@ -149,3 +149,8 @@ class DepartmentPosition(admin.ModelAdmin):
             return qs
         else:
             return qs.filter(organization=request.user.organization)
+
+
+@admin.register(Tariff)
+class TariffAdmin(admin.ModelAdmin):
+    ...

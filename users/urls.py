@@ -13,12 +13,14 @@ from users.views import (
     CurrentUserView,
     GetQRInviteView,
     ConfirmQRTeamJoin,
+    TariffView,
 )
 
 
 app_name = "users"
 
 urlpatterns = [
+    path("tariffs/", TariffView.as_view(), name="tariffs"),
     path("register/", RegistrationAPIView.as_view(), name="register"),
     path("login/", LoginAPIView.as_view(), name="login"),
     path(

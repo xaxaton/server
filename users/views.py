@@ -14,12 +14,13 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 
 from core.permissions import IsRecruiter
-from users.models import User, Organization
+from users.models import User, Organization, Tariff
 from users.serializers import (
     RegistrationSerializer,
     LoginSerializer,
     OrganizationSerializer,
     UserSerializer,
+    TariffSerializer
 )
 from users.renderers import UserJSONRenderer
 from users.token import (
@@ -27,6 +28,11 @@ from users.token import (
     invite_confirm_token,
     qr_invite_token,
 )
+
+
+class TariffView(ListAPIView):
+    serializer_class = TariffSerializer
+    queryset = Tariff.objects.filter()
 
 
 class RegistrationAPIView(APIView):

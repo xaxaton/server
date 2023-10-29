@@ -58,7 +58,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "proftestium.wsgi.application"
 
-if DEBUG or "test" in sys.argv:
+if "test" in sys.argv:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",

@@ -2,7 +2,7 @@ from django.urls import reverse
 
 from rest_framework.test import APITestCase
 
-from courses.models import Tariff
+from users.models import Tariff
 
 
 class ReviewTest(APITestCase):
